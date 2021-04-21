@@ -1,6 +1,9 @@
 const express = require('express');
 const firebase = require('firebase');
+const dotenv = require('dotenv');
 const app = express();
+
+dotenv.config();
 
 const server_port = process.env.YOUR_PORT || process.env.PORT || 3000;
 const server_host = process.env.YOUR_HOST || '0.0.0.0';
