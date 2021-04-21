@@ -20,7 +20,7 @@ firebase.initializeApp({
 let database = firebase.database();
 let ledStatus = true;
 
-database.ref('/').on('value', (snapshot) => {
+database.ref('/stateParams').on('value', (snapshot) => {
   ledStatus = snapshot.val().ledStatus;
   console.log(ledStatus);
 });
@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 
 app.post('/ledToggle', (req, res) => {
   console.log('request');
-  database.ref('/').set({ ledStatus: !ledStatus }, (err) => {
+  database.ref('/stateParams/ledStatus').set(!ledStatus, (err) => {
     if (err) {
       console.log('Failed with error: ' + err);
     } else {
