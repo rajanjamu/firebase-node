@@ -1,11 +1,22 @@
 <%- include("partials/header") %> 
 
-<form action="/ledOn" method="POST">
+<!-- <div class="d-flex justify-content-center mt-3">
+  <input type="checkbox" checked data-toggle="toggle" data-on="AUTO" data-off="MANUAL" data-onstyle="success" data-size="lg">
+</div> -->
+<form action="/ledToggle" method="POST">
+  <div class="d-flex justify-content-center mt-3">
+    <input type="checkbox" <%= ledStatus ? "checked" : "" %> data-toggle="toggle" data-on="LED ON" data-off="LED OFF" data-onstyle="success" data-size="lg" onChange="this.form.submit()">
+  </div>
+</form>
+
+
+
+<!-- <form action="/ledOn" method="POST">
   <input class="btn btn-success" type="submit" name="ledOn" value="LED ON" id="ledOn">
 </form>
 
 <form action="/ledOff" method="POST">
   <input class="btn btn-danger" type="submit" name="ledOff" value="LED OFF" id="ledOff">
-</form>
+</form> -->
 
 <%- include("partials/footer") %> 

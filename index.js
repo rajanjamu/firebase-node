@@ -18,26 +18,22 @@ firebase.initializeApp({
 
 // Get a reference to the database service
 let database = firebase.database();
+let ledStatus = true;
+
+database.ref('/').on('value', (snapshot) => {
+  ledStatus = snapshot.val().ledStatus;
+  console.log(ledStatus);
+});
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', { ledStatus: ledStatus });
 });
 
-app.post('/ledOn', (req, res) => {
-  database.ref('/').set({ ledStatus: 1 }, function (error) {
-    if (error) {
-      console.log('Failed with error: ' + error);
-    } else {
-      console.log('success');
-    }
-  });
-  res.redirect('/');
-});
-
-app.post('/ledOff', (req, res) => {
-  database.ref('/').set({ ledStatus: 0 }, function (error) {
-    if (error) {
-      console.log('Failed with error: ' + error);
+app.post('/ledToggle', (req, res) => {
+  console.log('request');
+  database.ref('/').set({ ledStatus: !ledStatus }, (err) => {
+    if (err) {
+      console.log('Failed with error: ' + err);
     } else {
       console.log('success');
     }
