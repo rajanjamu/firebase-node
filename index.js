@@ -2,14 +2,15 @@ const express = require('express');
 const firebase = require('firebase');
 const app = express();
 
-const port = process.env.PORT || 3000;
+const server_port = process.env.YOUR_PORT || process.env.PORT || 3000;
+const server_host = process.env.YOUR_HOST || '0.0.0.0';
 app.set('view engine', 'ejs');
 
 firebase.initializeApp({
-  apiKey: 'Om5VROO5S5B3kpGh1ywihjrv4V404nl7AdL2FgLv',
-  authDomain: 'esp-32-9e307.firebaseapp.com',
-  databaseURL: 'https://esp-32-9e307-default-rtdb.firebaseio.com',
-  storageBucket: 'bucket.appspot.com',
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  databaseURL: process.env.DATABASE_URL,
+  storageBucket: process.env.STORAGE_BUCKET,
 });
 
 // Get a reference to the database service
@@ -41,6 +42,7 @@ app.post('/ledOff', (req, res) => {
   res.redirect('/');
 });
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
+// Server
+app.listen(server_port, server_host, () => {
+  console.log(`Listening on port ${server_port}...`);
 });
