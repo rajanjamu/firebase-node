@@ -55,12 +55,17 @@
 
     <div class="row mt-4">
       <div class="col-6 text-right">Last Updated : </div>
-      <div class="col-6"><%= (new Date(timestamp)).toString().substring(4,24) %></div>
+      <div class="col-6"><%= (new Date(timestamp)).toString().substring(4,21) %></div>
     </div>
 
     <div class="row">
       <div class="col-6 text-right">Wifi Strength : </div>
       <div class="col-6"><%= wifiStatus %></div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 text-right">Wifi Name : </div>
+      <div class="col-6"><%= wifiSSID %></div>
     </div>
 
   </div>

@@ -29,11 +29,12 @@ firebase.initializeApp({
 
 // Get a reference to the database service
 let database = firebase.database();
-let valveStatus, threshold, mode, wifiSS, timestamp;
+let valveStatus, threshold, mode, wifiSS, wifiSSID, timestamp;
 
 database.ref('/dataStream').on('child_added', (snapshot, prevChildKey) => {
   console.log(snapshot.val());
   wifiSS = snapshot.val().wifiSS;
+  wifiSSID = snapshot.val().wifiSSID;
   timestamp = parseInt(snapshot.val().timestamp);
 });
 
@@ -65,6 +66,7 @@ app.get('/', (req, res) => {
     threshold,
     mode,
     wifiStatus: wifiStrength,
+    wifiSSID,
     timestamp,
   });
 });
