@@ -16,8 +16,8 @@ const server_port = process.env.YOUR_PORT || process.env.PORT || 3000;
 const server_host = process.env.YOUR_HOST || '0.0.0.0';
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: false }));
-//app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.set('view engine', 'ejs');
 
 firebase.initializeApp({
@@ -50,19 +50,14 @@ io.on('connection', (socket) => {
 
 app.get('/', (req, res) => {
   let wifiStrength;
-  console.log(wifiSS);
   if (wifiSS >= -50) {
     wifiStrength = 'Excellent';
-    console.log('Excellent');
   } else if (wifiSS >= -60) {
     wifiStrength = 'Very Good';
-    console.log('Very Good');
   } else if (wifiSS >= -70) {
     wifiStrength = 'Good';
-    console.log('Good');
   } else {
     wifiStrength = 'Poor';
-    console.log('Poor');
   }
 
   res.render('index', {
