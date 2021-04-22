@@ -49,7 +49,29 @@ io.on('connection', (socket) => {
 });
 
 app.get('/', (req, res) => {
-  res.render('index', { valveStatus, threshold, mode, wifiSS, timestamp });
+  let wifiStrength;
+  console.log(wifiSS);
+  if (wifiSS >= -50) {
+    wifiStrength = 'Excellent';
+    console.log('Excellent');
+  } else if (wifiSS >= -60) {
+    wifiStrength = 'Very Good';
+    console.log('Very Good');
+  } else if (wifiSS >= -70) {
+    wifiStrength = 'Good';
+    console.log('Good');
+  } else {
+    wifiStrength = 'Poor';
+    console.log('Poor');
+  }
+
+  res.render('index', {
+    valveStatus,
+    threshold,
+    mode,
+    wifiStatus: wifiStrength,
+    timestamp,
+  });
 });
 
 app.post('/updateState', (req, res) => {
