@@ -1,12 +1,23 @@
+const path = require('path');
+const http = require('http');
 const express = require('express');
+const socketio = require('socket.io');
 const firebase = require('firebase');
 const dotenv = require('dotenv');
+const { time } = require('console');
+
 const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
 
 dotenv.config();
 
 const server_port = process.env.YOUR_PORT || process.env.PORT || 3000;
 const server_host = process.env.YOUR_HOST || '0.0.0.0';
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }));
+//app.use(express.json());
 app.set('view engine', 'ejs');
 
 firebase.initializeApp({
@@ -18,30 +29,61 @@ firebase.initializeApp({
 
 // Get a reference to the database service
 let database = firebase.database();
-let ledStatus = true;
+let valveStatus, threshold, mode, wifiSS, timestamp;
 
-database.ref('/stateParams').on('value', (snapshot) => {
-  ledStatus = snapshot.val().ledStatus;
-  console.log(ledStatus);
+database.ref('/dataStream').on('child_added', (snapshot, prevChildKey) => {
+  console.log(snapshot.val());
+  wifiSS = snapshot.val().wifiSS;
+  timestamp = parseInt(snapshot.val().timestamp);
+});
+
+io.on('connection', (socket) => {
+  console.log('New socket connection!');
+
+  database.ref('/stateParams').on('value', (snapshot) => {
+    valveStatus = snapshot.val().valveStatus;
+    threshold = snapshot.val().threshold;
+    mode = snapshot.val().mode;
+    socket.emit('valveStatusUpdate', valveStatus);
+  });
 });
 
 app.get('/', (req, res) => {
-  res.render('index', { ledStatus: ledStatus });
+  res.render('index', { valveStatus, threshold, mode, wifiSS, timestamp });
 });
 
-app.post('/ledToggle', (req, res) => {
-  console.log('request');
-  database.ref('/stateParams/ledStatus').set(!ledStatus, (err) => {
+app.post('/updateState', (req, res) => {
+  const data = req.body;
+  let path, value, mode;
+
+  if (data.valveStatus != undefined) {
+    valveStatus = data.valveStatus == 'true';
+    path = 'valveStatus';
+    value = valveStatus;
+  }
+
+  if (data.mode != undefined) {
+    mode = data.mode == 'true';
+    path = 'mode';
+    value = mode;
+  }
+
+  if (data.threshold != undefined) {
+    threshold = parseInt(data.threshold);
+    path = 'threshold';
+    value = threshold;
+  }
+
+  database.ref(`/stateParams/${path}`).set(value, (err) => {
     if (err) {
       console.log('Failed with error: ' + err);
-    } else {
-      console.log('success');
+      return;
     }
   });
   res.redirect('/');
 });
 
 // Server
-app.listen(server_port, server_host, () => {
+server.listen(server_port, server_host, () => {
   console.log(`Listening on port ${server_port}...`);
 });

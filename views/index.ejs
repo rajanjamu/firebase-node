@@ -1,22 +1,87 @@
 <%- include("partials/header") %> 
 
-<!-- <div class="d-flex justify-content-center mt-3">
-  <input type="checkbox" checked data-toggle="toggle" data-on="AUTO" data-off="MANUAL" data-onstyle="success" data-size="lg">
-</div> -->
-<form action="/ledToggle" method="POST">
-  <div class="d-flex justify-content-center mt-3">
-    <input type="checkbox" <%= ledStatus ? "checked" : "" %> data-toggle="toggle" data-on="LED ON" data-off="LED OFF" data-onstyle="success" data-size="lg" onChange="this.form.submit()">
+<div class="container">
+  <div class="offset-sm-3 col-sm-6 col-12">
+
+    <div class="row mt-3">
+      <div class="col-6">
+        <div class="row">
+          <div class="col-12 text-center">
+            <input type="checkbox" id="wateringMode" <%= mode ? "checked" : "" %> data-toggle="toggle" data-on="AUTO" data-off="MANUAL" data-onstyle="warning" data-width="100">
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col-12 text-center">
+            Mode
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row">
+          <div class="col-12 text-center">
+            <input type="checkbox" id="valveButton" <%= valveStatus ? "checked" : "" %> <%= mode ? "disabled" : "" %> data-toggle="toggle" data-on="ON" data-off="OFF" data-onstyle="success" data-width="100">
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col-12 text-center">
+            Valve
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row mt-2">
+      <div class="col-12 text-center"><div class="display-4">34%</div></div>
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">Water Level</div>
+    </div>
+
+    <hr>
+
+    <!-- <div class="row mt-4">
+      <form action="" class="form-inline">
+        <div class="col-4">
+          <div class="form-group mb-2">
+            <label for="staticEmail2" class="sr-only">Email</label>
+            <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Threshold">
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group mb-2">
+            <label for="inputPassword2" class="sr-only">Password</label>
+            <input type="password" class="form-control" id="inputPassword2" placeholder="Pass">
+          </div>
+        </div>
+        <div class="col-4">
+          <button type="submit" class="btn btn-primary mb-2">Update</button>
+        </div>
+      </form>
+    </div> -->
+
+    <div class="row mt-4">
+      <div class="col-3">Threshold</div>
+      <div class="col-7">
+        <div class="slidecontainer text-center">
+          <input type="range" min="1" max="10" data-slider-step="1" value="<%= threshold %>" class="slider" id="thresholdSlider">
+        </div>
+      </div>
+      <div id="thresholdValue" class="col-2"><%= threshold %></div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-6 text-right">Last Updated : </div>
+      <div class="col-6"><%= (new Date(timestamp)).toString().substring(4,24) %></div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 text-right">Wifi Strength : </div>
+      <div class="col-6"><%= wifiSS %></div>
+    </div>
+
   </div>
-</form>
-
-
-
-<!-- <form action="/ledOn" method="POST">
-  <input class="btn btn-success" type="submit" name="ledOn" value="LED ON" id="ledOn">
-</form>
-
-<form action="/ledOff" method="POST">
-  <input class="btn btn-danger" type="submit" name="ledOff" value="LED OFF" id="ledOff">
-</form> -->
+</div>
 
 <%- include("partials/footer") %> 
